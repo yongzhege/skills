@@ -364,7 +364,7 @@ cmux browser surface:N state load /tmp/session.json
 
 ```bash
 cmux browser surface:N tab list
-cmux browser surface:N tab new https://example.com/pricing
+cmux browser surface:N tab new https://www.yongzhege.com/
 cmux browser surface:N tab switch 1                 # 按索引切换
 cmux browser surface:N tab switch surface:7          # 按 surface ref 切换
 cmux browser surface:N tab close                     # 关闭当前标签
