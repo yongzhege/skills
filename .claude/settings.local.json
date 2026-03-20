@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:cmux-artemzhutov.netlify.app)",
+      "Bash(cmux:*)",
+      "Bash(chmod:*)",
+      "Bash(cmux browser:*)",
+      "Bash(for c:*)",
+      "Bash(do cmux:*)",
+      "Bash(done)",
+      "Bash(cmux send:*)",
+      "Bash(cmux set-status:*)",
+      "Bash(cmux browser --surface surface:8 eval \":*)",
+      "WebFetch(domain:cmux.com)",
+      "Bash(scp:*)",
+      "Bash(sshpass -p \"qisiqisi\" scp -o StrictHostKeyChecking=no root@10.88.1.240:/tmp/vm200.png /tmp/vm200.png)",
+      "Bash(sshpass -p \"qisiqisi\" scp -o StrictHostKeyChecking=no root@10.88.1.240:/tmp/vm200b.png /tmp/vm200b.png)",
+      "Bash(sshpass -p \"qisiqisi\" scp -o StrictHostKeyChecking=no root@10.88.1.240:/tmp/vm200c.png /tmp/vm200c.png)",
+      "Bash(sshpass -p \"qisiqisi\" scp -o StrictHostKeyChecking=no root@10.88.1.240:/tmp/vm200d.png /tmp/vm200d.png)",
+      "Bash(sshpass -p \"qisiqisi\" scp -o StrictHostKeyChecking=no root@10.88.1.240:/tmp/vm200e.png /tmp/vm200e.png)",
+      "Bash(sshpass -p \"qisiqisi\" scp -o StrictHostKeyChecking=no root@10.88.1.240:/tmp/vm200f.png /tmp/vm200f.png)",
+      "Bash(sshpass -p \"qisiqisi\" scp -o StrictHostKeyChecking=no root@10.88.1.240:/tmp/vm200g.png /tmp/vm200g.png)",
+      "Bash(sshpass -p \"qisiqisi\" scp -o StrictHostKeyChecking=no root@10.88.1.240:/tmp/vm200h.png /tmp/vm200h.png)",
+      "Bash(sshpass -p \"qisiqisi\" scp -o StrictHostKeyChecking=no root@10.88.1.240:/tmp/vm200i.png /tmp/vm200i.png)",
+      "Bash(sshpass -p \"qisiqisi\" scp -o StrictHostKeyChecking=no root@10.88.1.240:/tmp/vm200j.png /tmp/vm200j.png)",
+      "Bash(sshpass -p \"qisiqisi\" scp -o StrictHostKeyChecking=no root@10.88.1.240:/tmp/vm200k.png /tmp/vm200k.png)"
+    ]
+  }
+}

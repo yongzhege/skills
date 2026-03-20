@@ -9,29 +9,23 @@
 - **浏览器自动化** — 打开网页、DOM 交互、表单填写、截图、JavaScript 执行
 - **视觉定位** — snapshot + screenshot 交叉定位，支持 ExtJS/React/Vue 等复杂框架
 - **侧边栏状态** — 进度条、状态标签、日志，实时展示任务进度
-- **PVE 图形界面控制** — 通过 qm guest exec + xdotool 操控虚拟机桌面（鼠标、键盘、窗口管理、截图）
+- **PVE 图形界面控制** — 通过 qm guest exec + xdotool 操控虚拟机桌面
 
 ## 安装
 
-### 方式 1: Claude Code 插件（推荐）
-
-```bash
-/plugin install cmux@cmux-skills
-```
-
-### 方式 2: 远程引用（跨设备同步）
+### 方式 1: 远程引用（推荐，跨设备同步）
 
 在 `~/.claude/CLAUDE.md` 中加一行：
 
 ```markdown
-Fetch and follow instructions from: https://raw.githubusercontent.com/yongzhege/skill/main/skills/cmux/SKILL.md
+Fetch and follow instructions from: https://raw.githubusercontent.com/yongzhege/skills/main/skills/cmux/SKILL.md
 ```
 
-### 方式 3: 跨工具安装
+### 方式 2: 跨工具安装
 
 ```bash
-git clone https://github.com/yongzhege/skill.git
-cd skill
+git clone https://github.com/yongzhege/skills.git
+cd skills
 ./install.sh claude      # Claude Code
 ./install.sh opencode    # OpenCode
 ./install.sh cursor      # Cursor
@@ -41,7 +35,7 @@ cd skill
 ./install.sh all         # 全部安装
 ```
 
-### 方式 4: 全局安装（当前设备所有项目生效）
+### 方式 3: 全局安装（当前设备所有项目生效）
 
 ```bash
 cp -r skills/cmux/ ~/.claude/skills/cmux/
@@ -72,8 +66,7 @@ cp -r skills/cmux/ ~/.claude/skills/cmux/
 ├── template/
 │   └── SKILL.md                 # 创建新 skill 的模板
 ├── install.sh                   # 跨工具安装器
-├── test-browser.html            # 浏览器自动化测试页
-└── README.md
+└── test-browser.html            # 浏览器自动化测试页
 ```
 
 ## 要求
