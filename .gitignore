@@ -2,3 +2,4 @@
 .claude/plans/
 *.ppm
 .claude/skills/
+.claude/settings.local.json
