@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>cmux Browser Automation Test</title>
+<style>
+  body { font-family: system-ui; max-width: 800px; margin: 20px auto; padding: 0 20px; }
+  h1 { border-bottom: 2px solid #333; padding-bottom: 8px; }
+  section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 8px; }
+  section h2 { margin-top: 0; }
+  input, select, textarea { padding: 6px 10px; margin: 4px; border: 1px solid #ccc; border-radius: 4px; }
+  button { padding: 8px 16px; margin: 4px; cursor: pointer; border: 1px solid #666; border-radius: 4px; background: #f0f0f0; }
+  button:hover { background: #e0e0e0; }
+  .result { padding: 10px; margin-top: 8px; background: #f5f5f5; border-radius: 4px; min-height: 20px; }
+  .hidden { display: none; }
+  .highlight { background: #ffffcc !important; }
+  #status-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #333; color: #0f0; padding: 8px 20px; font-family: monospace; }
+  .checkbox-group label { margin-right: 15px; }
+  #dynamic-list li { padding: 4px 0; }
+  #scroll-area { height: 150px; overflow-y: scroll; border: 1px solid #ccc; padding: 10px; }
+  iframe { width: 100%; height: 200px; border: 1px solid #ccc; border-radius: 4px; }
+  #canvas-area { border: 1px solid #ccc; }
+</style>
+</head>
+<body>
+
+<h1>cmux Browser Automation Test Page</h1>
+<p id="intro">This page tests all browser automation capabilities.</p>
+
+<!-- Section 1: Basic Form -->
+<section id="sec-form">
+  <h2>1. Form Input</h2>
+  <div>
+    <label>Username: <input type="text" id="username" name="username" placeholder="Enter username"></label>
+    <label>Password: <input type="password" id="password" name="password" placeholder="Enter password"></label>
+  </div>
+  <div>
+    <label>Email: <input type="email" id="email" name="email" placeholder="user@example.com"></label>
+  </div>
+  <div>
+    <label>Region:
+      <select id="region" name="region">
+        <option value="">-- Select --</option>
+        <option value="cn">China</option>
+        <option value="us">United States</option>
+        <option value="jp">Japan</option>
+      </select>
+    </label>
+  </div>
+  <div>
+    <textarea id="notes" rows="3" cols="40" placeholder="Additional notes..."></textarea>
+  </div>
+  <button id="btn-submit" onclick="submitForm()">Submit</button>
+  <button id="btn-clear" onclick="clearForm()">Clear</button>
+  <div class="result" id="form-result"></div>
+</section>
+
+<!-- Section 2: Checkboxes and Radio -->
+<section id="sec-checks">
+  <h2>2. Checkboxes & Radio</h2>
+  <div class="checkbox-group">
+    <label><input type="checkbox" id="chk-terms" name="terms"> Accept Terms</label>
+    <label><input type="checkbox" id="chk-newsletter" name="newsletter"> Subscribe Newsletter</label>
+    <label><input type="checkbox" id="chk-remember" name="remember" checked> Remember Me</label>
+  </div>
+  <div>
+    <label><input type="radio" name="plan" value="free"> Free</label>
+    <label><input type="radio" name="plan" value="pro"> Pro</label>
+    <label><input type="radio" name="plan" value="enterprise"> Enterprise</label>
+  </div>
+  <div class="result" id="check-result"></div>
+</section>
+
+<!-- Section 3: Dynamic Content -->
+<section id="sec-dynamic">
+  <h2>3. Dynamic Content</h2>
+  <button id="btn-add" onclick="addItem()">Add Item</button>
+  <button id="btn-toggle" onclick="toggleHidden()">Toggle Hidden</button>
+  <button id="btn-delayed" onclick="delayedAction()">Delayed Action (2s)</button>
+  <div class="hidden" id="hidden-content">This content was hidden!</div>
+  <ul id="dynamic-list"></ul>
+  <div class="result" id="dynamic-result">Items: 0</div>
+</section>
+
+<!-- Section 4: Scroll Area -->
+<section id="sec-scroll">
+  <h2>4. Scroll Area</h2>
+  <div id="scroll-area"></div>
+  <button id="btn-scroll-bottom" onclick="document.getElementById('scroll-target').scrollIntoView()">Scroll to Target</button>
+</section>
+
+<!-- Section 5: Dialog -->
+<section id="sec-dialog">
+  <h2>5. Dialogs</h2>
+  <button id="btn-alert" onclick="alert('Hello from alert!')">Alert</button>
+  <button id="btn-confirm" onclick="handleConfirm()">Confirm</button>
+  <button id="btn-prompt" onclick="handlePrompt()">Prompt</button>
+  <div class="result" id="dialog-result"></div>
+</section>
+
+<!-- Section 6: iframe -->
+<section id="sec-iframe">
+  <h2>6. iframe</h2>
+  <iframe id="test-iframe" srcdoc="
+    <html><body style='font-family:system-ui;padding:10px;'>
+      <h3>Inside iframe</h3>
+      <input type='text' id='iframe-input' placeholder='Type here in iframe'>
+      <button id='iframe-btn' onclick='document.getElementById(&quot;iframe-output&quot;).textContent = document.getElementById(&quot;iframe-input&quot;).value'>Submit</button>
+      <div id='iframe-output' style='margin-top:8px;padding:8px;background:#eef;'></div>
+    </body></html>
+  "></iframe>
+</section>
+
+<!-- Section 7: Canvas (limitation test) -->
+<section id="sec-canvas">
+  <h2>7. Canvas (Limitation Test)</h2>
+  <canvas id="canvas-area" width="300" height="100"></canvas>
+  <div class="result" id="canvas-result">Canvas click count: 0</div>
+</section>
+
+<!-- Section 8: Keyboard Events -->
+<section id="sec-keyboard">
+  <h2>8. Keyboard Events</h2>
+  <input type="text" id="key-input" placeholder="Press keys here..." style="width:300px">
+  <div class="result" id="key-result">Last key: none</div>
+</section>
+
+<div id="status-bar">Ready | Items: 0 | Form: empty</div>
+
+<script>
+  let itemCount = 0;
+  let canvasClicks = 0;
+
+  function submitForm() {
+    const data = {
+      username: document.getElementById('username').value,
+      email: document.getElementById('email').value,
+      region: document.getElementById('region').value,
+      notes: document.getElementById('notes').value,
+      terms: document.getElementById('chk-terms').checked,
+    };
+    document.getElementById('form-result').textContent = 'Submitted: ' + JSON.stringify(data);
+    updateStatus('Form: submitted');
+  }
+
+  function clearForm() {
+    ['username','password','email','notes'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('region').selectedIndex = 0;
+    document.getElementById('form-result').textContent = 'Form cleared';
+    updateStatus('Form: cleared');
+  }
+
+  function addItem() {
+    itemCount++;
+    const li = document.createElement('li');
+    li.textContent = 'Item #' + itemCount + ' added at ' + new Date().toLocaleTimeString();
+    li.id = 'item-' + itemCount;
+    document.getElementById('dynamic-list').appendChild(li);
+    document.getElementById('dynamic-result').textContent = 'Items: ' + itemCount;
+    updateStatus('Items: ' + itemCount);
+  }
+
+  function toggleHidden() {
+    const el = document.getElementById('hidden-content');
+    el.classList.toggle('hidden');
+    document.getElementById('dynamic-result').textContent = 'Hidden: ' + el.classList.contains('hidden');
+  }
+
+  function delayedAction() {
+    document.getElementById('dynamic-result').textContent = 'Waiting...';
+    setTimeout(() => {
+      document.getElementById('dynamic-result').textContent = 'Delayed action complete!';
+      updateStatus('Delayed: done');
+    }, 2000);
+  }
+
+  function handleConfirm() {
+    const result = confirm('Do you confirm?');
+    document.getElementById('dialog-result').textContent = 'Confirm result: ' + result;
+  }
+
+  function handlePrompt() {
+    const result = prompt('Enter your name:', 'Agent');
+    document.getElementById('dialog-result').textContent = 'Prompt result: ' + (result || 'cancelled');
+  }
+
+  function updateStatus(msg) {
+    document.getElementById('status-bar').textContent = msg + ' | ' + new Date().toLocaleTimeString();
+  }
+
+  // Scroll area content
+  const scrollArea = document.getElementById('scroll-area');
+  for (let i = 1; i <= 50; i++) {
+    const p = document.createElement('p');
+    p.textContent = 'Scroll line ' + i;
+    p.id = 'scroll-line-' + i;
+    if (i === 50) p.id = 'scroll-target';
+    scrollArea.appendChild(p);
+  }
+
+  // Canvas
+  const canvas = document.getElementById('canvas-area');
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#336699';
+  ctx.fillRect(0, 0, 300, 100);
+  ctx.fillStyle = '#fff';
+  ctx.font = '16px system-ui';
+  ctx.fillText('Click me (canvas)', 80, 55);
+  canvas.addEventListener('click', (e) => {
+    canvasClicks++;
+    document.getElementById('canvas-result').textContent = 'Canvas click count: ' + canvasClicks + ' at (' + e.offsetX + ',' + e.offsetY + ')';
+  });
+
+  // Keyboard
+  document.getElementById('key-input').addEventListener('keydown', (e) => {
+    document.getElementById('key-result').textContent = 'Last key: ' + e.key + ' (code: ' + e.code + ')';
+  });
+
+  // Checkbox change events
+  document.querySelectorAll('#sec-checks input').forEach(el => {
+    el.addEventListener('change', () => {
+      const checked = [];
+      document.querySelectorAll('#sec-checks input:checked').forEach(c => checked.push(c.name || c.value));
+      document.getElementById('check-result').textContent = 'Checked: ' + checked.join(', ');
+    });
+  });
+</script>
+</body>
+</html>
